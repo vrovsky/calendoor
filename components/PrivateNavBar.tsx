@@ -49,6 +49,7 @@ export default function PrivateNavBar() {
       <div className="hover:scale-150 duration-500 ">
         <SignedIn>
           <UserButton />
+          {/* I need to add a text with user name  here */}
         </SignedIn>
       </div>
     </nav>
