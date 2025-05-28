@@ -7,7 +7,7 @@ export const eventFormSchema = z.object({
 
   isActive: z.boolean(),
 
-  durationInMinutes: z.coerce
+  duration_in_minutes: z.coerce
     .number()
     .int()
     .positive("Duration must be greater than 0")

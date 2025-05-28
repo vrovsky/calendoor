@@ -4,6 +4,7 @@ import { db } from "@/drizzle/db";
 import { EventTable } from "@/drizzle/schema";
 import { eventFormSchema } from "@/schema/events";
 import { auth } from "@clerk/nextjs/server";
+import { log } from "console";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -14,6 +15,7 @@ export async function createEvent(
 ): Promise<void> {
   try {
     const { userId } = await auth();
+    console.log(userId);
 
     const { success, data } = eventFormSchema.safeParse(unsafeData);
 
@@ -21,7 +23,12 @@ export async function createEvent(
       throw new Error("Invalid event data or user not authenticated.");
     }
 
-    await db.insert(EventTable).values({ ...data, clerkUserId: userId });
+    await db.insert(EventTable).values({
+      ...data,
+
+      clerkUserId: userId,
+      updatedAt: new Date(),
+    });
   } catch (error: any) {
     throw new Error(`Failed to create event: ${error.message || error}`);
   } finally {
@@ -40,7 +47,7 @@ export async function updateEvent(
       throw new Error("Invalid event data or user not authenticated.");
     }
 
-    const { rowCount }: any = await db
+    const { rowCount } = await db
       .update(EventTable)
       .set({ ...data })
       .where(and(eq(EventTable.id, id), eq(EventTable.clerkUserId, userId)));

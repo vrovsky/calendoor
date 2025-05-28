@@ -25,7 +25,7 @@ export const EventTable = pgTable(
 
     name: text("name").notNull(),
     description: text("description"),
-    durationInMinutes: integer("durationInMinutes").notNull(),
+    duration_in_minutes: integer("duration_in_minutes").notNull(),
     clerkUserId: text("clerkUserId").notNull(),
     isActive: boolean("isActive").notNull().default(true),
     createdAt,

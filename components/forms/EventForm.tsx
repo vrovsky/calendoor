@@ -39,7 +39,7 @@ export function EventForm({
     id: string;
     name: string;
     description: string;
-    durationInMinutes: number;
+    duration_in_minutes: number;
     isActive: boolean;
   };
 }) {
@@ -51,7 +51,7 @@ export function EventForm({
       ? { ...event }
       : {
           isActive: true,
-          durationInMinutes: 30,
+          duration_in_minutes: 30,
           description: "",
           name: "",
         },
@@ -100,7 +100,7 @@ export function EventForm({
 
         <FormField
           control={form.control}
-          name="durationInMinutes"
+          name="duration_in_minutes"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Duration</FormLabel>
