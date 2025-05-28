@@ -30,6 +30,7 @@ import {
 } from "../ui/alert-dialog";
 import { useTransition } from "react";
 import Link from "next/link";
+import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events";
 
 export function EventForm({
   event,
@@ -55,6 +56,19 @@ export function EventForm({
           name: "",
         },
   });
+
+  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    const action =
+      event == null ? createEvent : updateEvent.bind(null, event.id);
+    try {
+      await action(values);
+    } catch (error: any) {
+      form.setError("root", {
+        message: `There was an error saving your event ${error.message}`,
+      });
+    }
+  }
+
   return (
     <Form {...form}>
       <form
@@ -74,10 +88,10 @@ export function EventForm({
             <FormItem>
               <FormLabel>Event Name</FormLabel>
               <FormControl>
-                <Input placeholder="Event Name" {...field} />
+                <Input {...field} />
               </FormControl>
-              <FormDescription>
-                The name users will see when booking
+              <FormDescription className="text-xs">
+                *the name users will see when booking
               </FormDescription>
               <FormMessage />
             </FormItem>
