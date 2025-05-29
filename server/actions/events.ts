@@ -82,6 +82,7 @@ export async function deleteEvent(id: string): Promise<void> {
     throw new Error(`Failed to delete event: ${error.message || error}`);
   } finally {
     revalidatePath("/events");
+    redirect("/events");
   }
 }
 
@@ -94,4 +95,15 @@ export async function getEvents(clerkUserId: string): Promise<EventRow[]> {
   });
 
   return events;
+}
+
+export async function getEvent(
+  userId: string,
+  eventId: string
+): Promise<EventRow | undefined> {
+  const event = await db.query.EventTable.findFirst({
+    where: ({ id, clerkUserId }, { and, eq }) =>
+      and(eq(clerkUserId, userId), eq(id, eventId)),
+  });
+  return event ?? undefined;
 }

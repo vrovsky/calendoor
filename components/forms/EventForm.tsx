@@ -38,7 +38,7 @@ export function EventForm({
   event?: {
     id: string;
     name: string;
-    description: string;
+    description: string | undefined;
     duration_in_minutes: number;
     isActive: boolean;
   };
@@ -153,12 +153,12 @@ export function EventForm({
             </FormItem>
           )}
         />
-        <div className="flex gap-2 justify-end">
+        <div className="flex w-full justify-between">
           {event && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
-                  className="cursor-pointer hover:scale-105 hover:bg-red-200"
+                  className="cursor-pointer hover:scale-110 font-bold"
                   variant="destructive"
                   disabled={IsDeletePending || form.formState.isSubmitting}
                 >
@@ -176,7 +176,7 @@ export function EventForm({
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    className="bg-red-500 hover:bg-red-700 cursor-pointer"
+                    className="bg-red-500 hover:bg-red-600 cursor-pointer font-bold"
                     disabled={IsDeletePending || form.formState.isSubmitting}
                     onClick={() => {
                       startDeleteTransition(async () => {
@@ -196,22 +196,25 @@ export function EventForm({
               </AlertDialogContent>
             </AlertDialog>
           )}
-
-          <Button
-            disabled={IsDeletePending || form.formState.isSubmitting}
-            type="button"
-            asChild
-            variant={"outline"}
-          >
-            <Link href="/events">Cancel</Link>
-          </Button>
-          <Button
-            className="cursor-pointer hover:scale-105 bg-blue-400 hover:bg-blue-500"
-            disabled={IsDeletePending || form.formState.isSubmitting}
-            type="submit"
-          >
-            Save
-          </Button>
+          {!event && <div></div>}
+          <div className="flex gap-4 font-bold items-end">
+            <Button
+              disabled={IsDeletePending || form.formState.isSubmitting}
+              type="button"
+              asChild
+              variant={"outline"}
+              className="hover:scale-110"
+            >
+              <Link href="/events">Cancel</Link>
+            </Button>
+            <Button
+              className="cursor-pointer hover:scale-110 bg-blue-500 hover:bg-blue-600"
+              disabled={IsDeletePending || form.formState.isSubmitting}
+              type="submit"
+            >
+              Save
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

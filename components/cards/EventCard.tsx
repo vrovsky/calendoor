@@ -48,8 +48,8 @@ export default function EventCard({
         </CardContent>
       )}
 
-      <CardFooter className="flex justify-end gap-2 mt-auto">
-        {!isActive && (
+      <CardFooter className="flex justify-end gap-2">
+        {isActive && (
           <CopyEventButton
             variant="outline"
             eventId={id}
@@ -57,7 +57,7 @@ export default function EventCard({
           />
         )}
         <Button
-          className="cursor-pointer hover:scale-105 bg-blue-300 hover:bg-blue-400"
+          className="cursor-pointer  hover:scale-105 bg-blue-300 hover:bg-blue-400"
           asChild
         >
           <Link href={`/events/${id}/edit`}>Edit</Link>
