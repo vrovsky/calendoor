@@ -1,23 +1,22 @@
-// import EventCard from "@/components/cards/EventCard";
+import EventCard from "@/components/cards/EventCard";
 import { Button } from "@/components/ui/button";
-// import { getEvents } from "@/server/actions/events";
+import { getEvents } from "@/server/actions/events";
 import { auth } from "@clerk/nextjs/server";
 import { CalendarPlus, CalendarRange } from "lucide-react";
 import Link from "next/link";
 
 export default async function EventsPage() {
-  // Get the authenticated user's ID
   const { userId, redirectToSignIn } = await auth();
-  // Redirect to sign-in page if user is not authenticated
+
   if (!userId) return redirectToSignIn();
 
-  // const events = await getEvents(userId);
+  const events = await getEvents(userId);
 
   return (
-    <section className="flex flex-col items-center gap-8 animate-fade-in">
+    <section className="flex flex-col items-center  gap-4 animate-fade-in">
       {/* Page title and "New Event" button */}
-      <div className="flex gap-4">
-        <h1 className="text-2xl xl:text-3xl font-semibold mb-6">Events</h1>
+      <div className="flex flex-col text-center">
+        <h1 className="text-2xl xl:text-3xl font-semibold mb-2">Events</h1>
         {/* 
                         Without asChild, the Button would render as:
                         <button><a href="/dashboard">Go to Dashboard</a></button> <!-- Invalid HTML -->
@@ -26,7 +25,7 @@ export default async function EventsPage() {
                         This is useful when you want to make another element (like a <Link>) look and behave like a button without breaking HTML semantics.
                         */}
         <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 hover:scale-105 duration-200 border-b-2 border-blue-700 hover:border-blue-500 rounded-md shadow-accent-foreground text-lg font-semibold"
+          className="bg-blue-400 hover:bg-blue-500 text-white py-2 hover:scale-105 duration-200 border-b-2 border-blue-700 hover:border-blue-500 rounded-md shadow-accent-foreground text-lg font-semibold"
           asChild
         >
           <Link href="/events/new">
@@ -36,7 +35,7 @@ export default async function EventsPage() {
       </div>
 
       {/* Show event cards if any exist, otherwise show empty state */}
-      {/* {events.length > 0 ? (
+      {events.length > 0 ? (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-10">
           {events.map((event) => (
             <EventCard key={event.id} {...event} />
@@ -56,7 +55,7 @@ export default async function EventsPage() {
             </Link>
           </Button>
         </div>
-      )} */}
+      )}
     </section>
   );
 }

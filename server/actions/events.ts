@@ -12,28 +12,24 @@ import { z } from "zod";
 
 export async function createEvent(
   unsafeData: z.infer<typeof eventFormSchema>
-): Promise<void> {
-  try {
-    const { userId } = await auth();
-    console.log(userId);
+): Promise<{ error: boolean | undefined }> {
+  const { userId } = await auth();
+  console.log(userId);
 
-    const { success, data } = eventFormSchema.safeParse(unsafeData);
+  const { success, data } = eventFormSchema.safeParse(unsafeData);
 
-    if (!success || !userId) {
-      throw new Error("Invalid event data or user not authenticated.");
-    }
-
-    await db.insert(EventTable).values({
-      ...data,
-
-      clerkUserId: userId,
-      updatedAt: new Date(),
-    });
-  } catch (error: any) {
-    throw new Error(`Failed to create event: ${error.message || error}`);
-  } finally {
-    revalidatePath("/events");
+  if (!success || !userId) {
+    return { error: true };
   }
+
+  await db.insert(EventTable).values({
+    ...data,
+
+    clerkUserId: userId,
+    updatedAt: new Date(),
+  });
+  revalidatePath("/events");
+  redirect("/events");
 }
 
 export async function updateEvent(
@@ -90,3 +86,12 @@ export async function deleteEvent(id: string): Promise<void> {
 }
 
 type EventRow = typeof EventTable.$inferSelect;
+
+export async function getEvents(clerkUserId: string): Promise<EventRow[]> {
+  const events = await db.query.EventTable.findMany({
+    where: ({ clerkUserId: userIdCol }, { eq }) => eq(userIdCol, clerkUserId),
+    orderBy: ({ name }, { asc, sql }) => asc(sql`lower(${name})`),
+  });
+
+  return events;
+}
