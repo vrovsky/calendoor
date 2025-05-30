@@ -5,3 +5,12 @@ export function formatEventDescription(duration_in_minutes: number) {
   const hoursString = `${hours} ${hours > 1 ? "hrs" : "hr"}`;
   return `${hoursString} ${minutesString}`;
 }
+
+export function formatTimezoneOffset(timezone: string) {
+  return new Intl.DateTimeFormat(undefined, {
+    timeZone: timezone,
+    timeZoneName: "shortOffset",
+  })
+    .formatToParts(new Date())
+    .find((part) => part.type == "timeZoneName")?.value;
+}

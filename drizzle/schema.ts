@@ -49,7 +49,7 @@ export const scheduleRelations = relations(ScheduleTable, ({ many }) => ({
 export const scheduleDayOfWeekEnum = pgEnum("day", DAYS_OF_WEEK_IN_ORDER);
 
 export const ScheduleAvailabilityTable = pgTable(
-  "scheduleAvailabilities",
+  "schedule_availabilities",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     scheduleId: uuid("scheduleId")
@@ -66,8 +66,8 @@ export const ScheduleAvailabilityRelations = relations(
   ScheduleAvailabilityTable,
   ({ one }) => ({
     schedule: one(ScheduleTable, {
-      fields: [ScheduleAvailabilityTable.scheduleId], // local key
-      references: [ScheduleTable.id], // foreign key
+      fields: [ScheduleAvailabilityTable.scheduleId],
+      references: [ScheduleTable.id],
     }),
   })
 );
